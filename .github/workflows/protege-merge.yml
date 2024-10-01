@@ -1,0 +1,18 @@
+yaml
+  name: Proteção de Merge
+  
+  on:
+    pull_request:
+      branches:
+        - desenvolvimento
+  
+  jobs:
+    check:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Verificar aprovações
+          run: |
+            if [[ $(jq '.pull_request.approvals | length' $GITHUB_EVENT_PATH) -lt 2 ]]; then
+              echo "Merge não permitido: precisa de pelo menos duas aprovações."
+              exit 1
+            fi
